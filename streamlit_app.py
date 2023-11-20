@@ -1,9 +1,11 @@
-from openai import OpenAI
+import openai
 import streamlit as st
+import os
 
 st.title("ChatGPT-like clone")
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+openai.api_base = os.environ["OPENAI_API_BASE"]  # point to the local server
+openai.api_key = ""  # no need for an API key
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
