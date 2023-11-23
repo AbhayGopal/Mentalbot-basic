@@ -4,8 +4,9 @@ import os
 
 st.title("ChatGPT-like clone")
 
-openai.api_base = os.environ["OPENAI_API_BASE"]  # point to the local server
-openai.api_key = ""  # no need for an API key
+# Access the API key from the secrets.toml file
+api_key = st.secrets["openai"]["api_key"]
+openai.api_key = api_key
 
 if "openai_model" not in st.session_state:
     st.session_state["openai_model"] = "gpt-3.5-turbo"
@@ -25,7 +26,7 @@ if prompt := st.chat_input("What is up?"):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
-        for response in client.chat.completions.create(
+        for response in openai.ChatCompletion.create(
             model=st.session_state["openai_model"],
             messages=[
                 {"role": m["role"], "content": m["content"]}
